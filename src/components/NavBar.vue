@@ -88,7 +88,7 @@ export default {
         .then(() => {
           console.log('Ha cerrado sesion con exito')
           this.redirectIndex()
-          this.toggleLoggedIn()
+          this.loggedIn = !this.loggedIn
         })
         .catch((error) => {
           console.log('No se ha podido cerrar sesion: ', error)
@@ -96,10 +96,6 @@ export default {
     },
     async redirectIndex () {
       await this.$router.push('/')
-    },
-    toggleLoggedIn () {
-      this.loggedIn = !this.loggedIn
-      eventBus.$emit('loggedInChanged', this.loggedIn)
     }
   }
 }

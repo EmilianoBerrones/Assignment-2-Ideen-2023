@@ -1,13 +1,15 @@
 <template>
   <v-container fluid>
-    <v-row class="text-center">
+    <v-row class="text-center" justify="center">
       <v-col cols="12">
         <h1 :style="$vuetify.breakpoint.mdAndUp === true ? 'font-size: 45px' : 'font-size: 30px'">
           INFORMACIÓN DEL ALUMNO
         </h1>
       </v-col>
       <v-col cols="12">
-        <v-img :src="imageURL" alt="Logo" style="border-radius: 50%"/>
+        <v-btn x-large text disabled height="200px">
+          <v-img :src="imageURL" alt='imagen' style="border-radius: 50%; width: 200px"/>
+        </v-btn>
       </v-col>
     </v-row>
     <v-row class="text-left" justify="center">
@@ -85,7 +87,7 @@ export default {
         .catch((error) => {
           console.log('Error al obtener el documento: ', error)
         })
-      const imageRef = firebase.storage.ref.child('imgyo.png')
+      const imageRef = firebase.storage().ref().child('imgyo1.png')
       imageRef
         .getDownloadURL()
         .then(url => {

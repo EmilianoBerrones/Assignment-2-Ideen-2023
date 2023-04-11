@@ -7,7 +7,7 @@
         </h1>
       </v-col>
       <v-col cols="12">
-        <img :src="require('@/assets/juan-escutia2.jpeg')" alt="Logo" style="border-radius: 50%">
+        <v-img :src="imageURL" alt="Logo" style="border-radius: 50%"/>
       </v-col>
     </v-row>
     <v-row class="text-left" justify="center">
@@ -15,13 +15,13 @@
              :class="$vuetify.breakpoint.mdAndUp === true ? 'texto-contenido' : 'texto-contenido centrar-texto' "
              md="4">
         Nombre completo
-        <p>Juan Escutia</p>
+        <p>{{userName}}</p>
       </v-col>
       <v-col cols="12"
              :class="$vuetify.breakpoint.mdAndUp === true ? 'texto-contenido' : 'texto-contenido centrar-texto'"
              md="1">
         Matrícula
-        <p>A01361234</p>
+        <p>{{studentId}}</p>
       </v-col>
     </v-row>
     <v-row class="text-left" justify="center">
@@ -29,13 +29,13 @@
              :class="$vuetify.breakpoint.mdAndUp === true ? 'texto-contenido' : 'texto-contenido centrar-texto'"
              md="4">
         Correo institucional
-        <p>A01361234@tec.mx</p>
+        <p>{{institutionalEmail}}</p>
       </v-col>
       <v-col cols="12"
              :class="$vuetify.breakpoint.mdAndUp === true ? 'texto-contenido' : 'texto-contenido centrar-texto'"
              md="1">
         Carrera
-        <p>ISC</p>
+        <p>ITC</p>
       </v-col>
     </v-row>
     <v-row class="text-left" justify="center">
@@ -43,7 +43,7 @@
              :class="$vuetify.breakpoint.mdAndUp === true ? 'texto-contenido' : 'texto-contenido centrar-texto'"
              md="4">
         Correo personal
-        <p> murioporlapatria@gmail.com</p>
+        <p>{{personalEmail}}</p>
       </v-col>
       <v-col cols="1"></v-col>
     </v-row>
@@ -52,8 +52,50 @@
 
 <script>
 
+import firebase from 'firebase/compat'
+
 export default {
-  name: 'Index'
+  name: 'Index',
+  created () {
+    this.getInfo()
+  },
+  data () {
+    return {
+      userName: '',
+      studentId: '',
+      personalEmail: '',
+      institutionalEmail: '',
+      imageURL: ''
+    }
+  },
+  methods: {
+    async getInfo () {
+      const userUID = firebase.auth().currentUser.uid
+      await firebase.firestore().collection('users').doc(userUID).get()
+        .then((doc) => {
+          if (doc.exists) {
+            this.userName = doc.data().nombre
+            this.studentId = doc.data().matricula
+            this.personalEmail = doc.data().correoPersonal
+            this.institutionalEmail = firebase.auth().currentUser.email
+          } else {
+            console.log('El documento no existe')
+          }
+        })
+        .catch((error) => {
+          console.log('Error al obtener el documento: ', error)
+        })
+      const imageRef = firebase.storage.ref.child('imgyo.png')
+      imageRef
+        .getDownloadURL()
+        .then(url => {
+          this.imageURL = url
+        })
+        .catch(error => {
+          console.log('Error al obtener la URL de descarga de la imagen:', error)
+        })
+    }
+  }
 }
 </script>
 

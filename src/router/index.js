@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from '../views/Index.vue'
+import Login from '@/views/Login.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Index',
-    component: Index
+    name: 'Login',
+    component: Login
   },
   {
     path: '/IndexMaterias',
@@ -17,6 +17,16 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/IndexMaterias.vue')
+  },
+  {
+    path: '/Index',
+    name: 'Index',
+    component: () => import('../views/Index.vue')
+  },
+  {
+    path: '/Register',
+    name: 'Register',
+    component: () => import('../views/Register.vue')
   }
 ]
 
